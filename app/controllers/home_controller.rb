@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    # This action will render the index.html.erb view
     @title_text = "MAZE"
+    @posts = Post.includes(:user, :comments, :likes).order(created_at: :desc)
   end
 end

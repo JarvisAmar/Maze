@@ -13,83 +13,75 @@
     <nav class="flex items-center mb-8">
       <div class="flex items-center gap-2">
         <img src="/images/maze-logo.svg" alt="Maze Logo" class="w-8 h-8">
-        <span class="text-xl font-semibold text-purple-600"><%= @title_text%></span>
+        <span class="text-xl font-semibold text-purple-600"><%= @title_text %></span>
       </div>
       <div class="relative flex-1 ml-16">
         <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
           <img src="/images/icons/search.svg" alt="Search" class="h-4 w-4 text-gray-400">
         </div>
         <input type="text" placeholder="Search for something here..." 
-          class="w-1/2  pl-10 pr-4 py-2.5 bg-white rounded-full focus:outline-none border border-[#3333334D]">
+          class="w-1/2 pl-10 pr-4 py-2.5 bg-white rounded-full focus:outline-none border border-[#3333334D]">
       </div>
     </nav>
 
     <!-- Post Input Section -->
     <div class="bg-white rounded-2xl border border-[#3333334D] mb-4">
       <div class="p-4">
-        <input type="text" placeholder="Whats happening ?" 
-          class="w-full px-4 py-3 bg-[#F8F9FD] rounded-xl focus:outline-none" />
-      </div>
-      <div class="flex items-center justify-between px-4 py-3 border-t border-[#3333334D]">
-        <div class="flex gap-6">
-          <button class="flex items-center gap-2 text-[#666666]">
-            <img src="/images/icons/video.svg" alt="Live Video" class="h-5 w-5">
-            <span>Live Video</span>
-          </button>
-          <button class="flex items-center gap-2 text-[#666666]">
-            <img src="/images/icons/photo.svg" alt="Photo/Video" class="h-5 w-5">
-            <span>Photo/Video</span>
-          </button>
-          <button class="flex items-center gap-2 text-[#666666]">
-            <img src="/images/icons/emoji.svg" alt="Feeling" class="h-5 w-5">
-            <span>Feeling</span>
-          </button>
-        </div>
-        <button class="px-8 py-2 bg-[#4378DB] text-white font-medium rounded-lg">Post</button>
+        <%= form_with(url: posts_path, local: true) do |form| %>
+          <%= form.text_field :content, placeholder: "What's happening?", class: "w-full px-4 py-3 bg-[#F8F9FD] rounded-xl focus:outline-none" %>
+          <%= form.hidden_field :user_id, value: 1 %> <%# Change this to the logged-in user %>
+          <div class="flex justify-end mt-2">
+            <%= form.submit "Post", class: "px-8 py-2 bg-[#4378DB] text-white font-medium rounded-lg" %>
+          </div>
+        <% end %>
       </div>
     </div>
-
-
 
     <!-- Feed Section -->
     <div class="space-y-4">
-      <!-- Post 1 -->
-      <div class="bg-white rounded-xl p-4 border border-[#3333334D]">
-        <div class="flex justify-between items-start mb-3">
-          <div>
-            <h3 class="text-[15px] font-semibold mb-1">Amazing Landscape from Cyphen Tower</h3>
-            <p class="text-sm text-[#666666]">15h • Public</p>
+      <% @posts.each do |post| %>
+        <div class="bg-white rounded-xl p-4 border border-[#3333334D]">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <h3 class="text-[15px] font-semibold mb-1"><%= post.user.name %></h3>
+              <p class="text-sm text-[#666666]"><%= time_ago_in_words(post.created_at) %> ago • Public</p>
+            </div>
+            <button class="text-[#666666]">•••</button>
           </div>
-          <button class="text-[#666666]">•••</button>
-        </div>
-        <p class="text-[#666666] mb-4">Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-        
-        <div class="text-sm text-[#666666] mb-3">
-          221 Likes • 3 Comments
-        </div>
+          <p class="text-[#666666] mb-4"><%= post.content %></p>
+          
+          <div class="text-sm text-[#666666] mb-3">
+            <%= post.likes.count %> Likes • <%= post.comments.count %> Comments
+          </div>
 
-        <div class="flex gap-12 py-1 border-y border-[#3333334D]">
-          <button class="flex items-center gap-2 py-2 text-[#666666]">
-            <img src="/images/icons/heart.svg" alt="Like" class="h-5 w-5">
-            <span>Like</span>
-          </button>
-          <button class="flex items-center gap-2 py-2 text-[#666666]">
-            <img src="/images/icons/comment.svg" alt="Comments" class="h-5 w-5">
-            <span>Comments</span>
-          </button>
-        </div>
+          <div class="flex gap-12 py-1 border-y border-[#3333334D]">
+            <!-- Like Button -->
+            <%= button_to "Like", post_likes_path(post), method: :post, class: "flex items-center gap-2 py-2 text-[#666666]" %>
 
-        <div class="flex items-center gap-2 mt-4">
-          <input type="text" placeholder="Write a comment" 
-            class="flex-1 px-4 py-2 bg-[#F8F9FD] rounded-full focus:outline-none">
-          <button class="text-[#4378DB]">
-            <svg class="h-5 w-5 rotate-90" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-            </svg>
-          </button>
+            <!-- Comment Button -->
+            <%= button_to "Comment", post_comments_path(post), method: :post, class: "flex items-center gap-2 py-2 text-[#666666]" %>
+          </div>
+
+          <!-- Comment Section -->
+          <div class="mt-4">
+            <% post.comments.each do |comment| %>
+              <div class="mb-2">
+                <strong><%= comment.user.name %>:</strong> <%= comment.content %>
+              </div>
+            <% end %>
+
+            <%= form_with(url: post_comments_path(post), local: true) do |form| %>
+              <div class="flex items-center gap-2">
+                <%= form.text_field :content, placeholder: "Write a comment", class: "flex-1 px-4 py-2 bg-[#F8F9FD] rounded-full focus:outline-none" %>
+                <%= form.hidden_field :user_id, value: 1 %> <%# Change this to the logged-in user %>
+                <%= form.submit "Send", class: "text-[#4378DB]" %>
+              </div>
+            <% end %>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
+
   </div>
 </body>
 </html>

@@ -6,6 +6,8 @@
 # end
 
 Rails.application.routes.draw do
+   # Define the root path to point to home#index
+  root 'home#index'
   # User routes
   post "/signup", to: "users#create"
 
