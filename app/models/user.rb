@@ -3,7 +3,7 @@ class User < ApplicationRecord
   has_many :comments
   has_many :likes
 
-  has_secure_password  # Enables password authentication
+  # has_secure_password  # Enables password authentication
 end
 
 
