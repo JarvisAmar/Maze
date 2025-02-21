@@ -12,6 +12,10 @@ module Maze3
 
     # config.api_only = true  # ✅ Add this line to make Rails work as an API
 
+     # ✅ Enable session support explicitly
+    #  config.middleware.use ActionDispatch::Session::CookieStore, key: '_maze3_session'
+
+
   config.autoload_lib(ignore: %w[assets tasks])
 
    end

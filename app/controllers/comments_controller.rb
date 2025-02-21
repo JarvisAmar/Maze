@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   def create
-    Rails.logger.debug "Received params: #{params.inspect}"  # Log all received parameters
+    # Rails.logger.debug "Received params: #{params.inspect}"  # Log all received parameters
 
     post = Post.find(params[:post_id])
     comment = post.comments.new(comment_params)

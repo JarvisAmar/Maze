@@ -11,6 +11,11 @@ Rails.application.routes.draw do
   # User routes
   post "/signup", to: "users#create"
 
+  # Session (Login & Logout)
+  post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy"
+
+
   # Post routes
   get "/posts", to: "posts#index"
   post "/posts", to: "posts#create"
@@ -22,11 +27,10 @@ Rails.application.routes.draw do
 
   # Like routes
   post "/posts/:post_id/likes", to: "likes#create", as: "post_likes"
+
   #dislike post
   delete "/posts/:post_id/likes/:user_id", to: "likes#destroy", as: "post_dislike"
 end
-
-
 
 
 # How This API Works
@@ -36,11 +40,6 @@ end
 # A user comments on a post → POST /comments
 # A user likes a post/comment → POST /likes
 
-
-# Rails.application.routes.draw do
-#   get 'home/index'
-#   root 'home#index'   # controller action
-# end
 
 # Summary
 # The get 'home/index' route maps the URL /home/index to the index action of the HomeController.

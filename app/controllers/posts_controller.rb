@@ -8,14 +8,15 @@ class PostsController < ApplicationController
   
   # post request
   def create
-    Rails.logger.debug "Received params: #{params.inspect}"  # Prints all received parameters
+    # Rails.logger.debug "Received params: #{params.inspect}"  # Prints all received parameters
     post = Post.new(post_params)
+    post.user_id = current_user&.id  # Ensure user_id is set from the session
     
     if post.save
-    Rails.logger.debug "Post successfully created: #{post.inspect}"  # Logs successful creation
+    # Rails.logger.debug "Post successfully created: #{post.inspect}"  # Logs successful creation
       render json: post, status: :created
     else
-    Rails.logger.debug "Post creation failed: #{post.errors.full_messages.inspect}"  # Logs errors
+    # Rails.logger.debug "Post creation failed: #{post.errors.full_messages.inspect}"  # Logs errors
       render json: { error: "Post could not be created",
                      messages: post.errors.full_messages },
                      status: :unprocessable_entity

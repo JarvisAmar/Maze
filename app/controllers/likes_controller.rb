@@ -2,7 +2,7 @@ class LikesController < ApplicationController
     # POST /posts/:post_id/likes
     def create
       post = Post.find(params[:post_id])  # Find the post using post_id
-      like = post.likes.new(user_id: params[:user_id])  # Associate the like with the user
+      like = post.likes.new(user_id: params[:user_id])    # Associate the like with the user
   
       if like.save
         render json: like, status: :created
@@ -23,5 +23,6 @@ class LikesController < ApplicationController
         render json: { error: "Like not found" }, status: :not_found
       end
     end
+    
   end
   
